@@ -1,81 +1,326 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Mirror Tabs Preview</title>
-  <style>
-    body {
-      font-family: sans-serif;
-      margin: 0;
-      padding: 20px;
-      background: #f0f0f0;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projek Teknologi Informasi</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    h1 {
-      text-align: center;
-    }
+        body {
+            font-family: 'Arial', sans-serif;
+            height: 100vh;
+            background: linear-gradient(135deg, #0c0c1e 0%, #1a1a3e 50%, #2d1b69 100%);
+            overflow: hidden;
+            position: relative;
+        }
 
-    .grid-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 20px;
-      padding: 20px;
-    }
+        /* Animated stars background */
+        .stars {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
 
-    .preview-tab {
-      border: 2px solid #ccc;
-      border-radius: 10px;
-      overflow: hidden;
-      background: white;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 2s infinite alternate;
+        }
 
-    .preview-tab iframe {
-      width: 100%;
-      height: 200px;
-      border: none;
-    }
+        .star:nth-child(odd) {
+            animation-delay: 1s;
+        }
 
-    .tab-header {
-      background: #2c3e50;
-      color: white;
-      padding: 10px;
-      font-size: 14px;
-      text-align: center;
-    }
-  </style>
+        @keyframes twinkle {
+            from { opacity: 0.3; transform: scale(1); }
+            to { opacity: 1; transform: scale(1.2); }
+        }
+
+        /* Shooting star animation */
+        .shooting-star {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(45deg, #fff, transparent);
+            border-radius: 50px;
+            animation: shoot 3s linear infinite;
+        }
+
+        @keyframes shoot {
+            0% {
+                transform: translateX(-100px) translateY(100px);
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(1000px) translateY(-100px);
+                opacity: 0;
+            }
+        }
+
+        /* Main container */
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            padding: 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .title {
+            color: #fff;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            text-align: center;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 0.5s forwards;
+        }
+
+        /* Button grid */
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .nav-button {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
+            padding: 2rem 1.5rem;
+            color: #fff;
+            text-decoration: none;
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .nav-button:nth-child(1) { animation: fadeInUp 0.8s ease-out 0.8s forwards; }
+        .nav-button:nth-child(2) { animation: fadeInUp 0.8s ease-out 1s forwards; }
+        .nav-button:nth-child(3) { animation: fadeInUp 0.8s ease-out 1.2s forwards; }
+        .nav-button:nth-child(4) { animation: fadeInUp 0.8s ease-out 1.4s forwards; }
+        .nav-button:nth-child(5) { animation: fadeInUp 0.8s ease-out 1.6s forwards; }
+        .nav-button:nth-child(6) { animation: fadeInUp 0.8s ease-out 1.8s forwards; }
+
+        .nav-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .nav-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 
+                0 15px 35px rgba(255, 255, 255, 0.1),
+                0 0 30px rgba(255, 255, 255, 0.2),
+                inset 0 0 20px rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.6);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .nav-button:hover::before {
+            left: 100%;
+        }
+
+        .nav-button:active {
+            transform: translateY(-2px);
+        }
+
+        .button-text {
+            position: relative;
+            z-index: 2;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .button-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+                max-width: 400px;
+            }
+            
+            .title {
+                font-size: 2rem;
+                margin-bottom: 2rem;
+            }
+            
+            .nav-button {
+                padding: 1.5rem 1rem;
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .title {
+                font-size: 1.5rem;
+            }
+            
+            .nav-button {
+                padding: 1.2rem 0.8rem;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
 </head>
 <body>
-  <h1>Web Mirror Preview</h1>
-  <div class="grid-container" id="tabContainer">
-    <!-- Tabs will be injected here -->
-  </div>
+    <!-- Animated stars -->
+    <div class="stars"></div>
+    
+    <!-- Shooting stars -->
+    <div class="shooting-star" style="top: 20%; width: 100px; animation-delay: 2s;"></div>
+    <div class="shooting-star" style="top: 60%; width: 80px; animation-delay: 5s;"></div>
+    <div class="shooting-star" style="top: 40%; width: 120px; animation-delay: 8s;"></div>
 
-  <script>
-    // List of URLs to be mirrored
-    const urls = [
-      "bit.ly/kelompoksatuTI",
-      "bit.ly/kelomppokduaTI",
-      "bit.ly/kelompoktigaTI",
-      "bit.ly/kelompoksatuTIv2",
-      "bit.ly/kelompokkeduaTI",
-      "bit.ly/kelompokketigaTI"
-    ];
+    <div class="container">
+        <h1 class="title">✨ Hasil Project ✨</h1>
+        
+        <div class="button-grid">
+            <a href="https://bit.ly/kelompoksatuTI" class="nav-button" target="_blank">
+                <div class="button-text">
+                    🌟 Kelompok 1A
+                </div>
+            </a>
+            
+            <a href="https://bit.ly/kelomppokduaTI" class="nav-button" target="_blank">
+                <div class="button-text">
+                    ⭐ Kelompok 2A
+                </div>
+            </a>
+            
+            <a href="https://bit.ly/kelompoktigaTI" class="nav-button" target="_blank">
+                <div class="button-text">
+                    💫 Kelompok 3A
+                </div>
+            </a>
+            
+            <a href="https://bit.ly/kelompoksatuTIv2" class="nav-button" target="_blank">
+                <div class="button-text">
+                    🌠 Kelompok 1B
+                </div>
+            </a>
+            
+            <a href="https://bit.ly/kelompokkeduaTI" class="nav-button" target="_blank">
+                <div class="button-text">
+                    ✨ Kelompok 2B
+                </div>
+            </a>
+            
+            <a href="https://bit.ly/kelompokketigaTI" class="nav-button" target="_blank">
+                <div class="button-text">
+                    🌟 Kelompok 3B
+                </div>
+            </a>
+        </div>
+    </div>
 
-    const tabContainer = document.getElementById("tabContainer");
+    <script>
+        // Generate random stars
+        function createStars() {
+            const starsContainer = document.querySelector('.stars');
+            const numberOfStars = 100;
+            
+            for (let i = 0; i < numberOfStars; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                
+                // Random position
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                
+                // Random size
+                const size = Math.random() * 3 + 1;
+                star.style.width = size + 'px';
+                star.style.height = size + 'px';
+                
+                // Random animation delay
+                star.style.animationDelay = Math.random() * 2 + 's';
+                star.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                
+                starsContainer.appendChild(star);
+            }
+        }
 
-    urls.forEach(url => {
-      const tab = document.createElement("div");
-      tab.className = "preview-tab";
+        // Add click effect to buttons
+        function addClickEffect() {
+            const buttons = document.querySelectorAll('.nav-button');
+            
+            buttons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    // Create ripple effect
+                    const ripple = document.createElement('div');
+                    const rect = button.getBoundingClientRect();
+                    const size = Math.max(rect.width, rect.height);
+                    const x = e.clientX - rect.left - size / 2;
+                    const y = e.clientY - rect.top - size / 2;
+                    
+                    ripple.style.cssText = `
+                        position: absolute;
+                        width: ${size}px;
+                        height: ${size}px;
+                        left: ${x}px;
+                        top: ${y}px;
+                        background: rgba(255, 255, 255, 0.3);
+                        border-radius: 50%;
+                        pointer-events: none;
+                        transform: scale(0);
+                        animation: ripple 0.6s ease-out;
+                    `;
+                    
+                    button.appendChild(ripple);
+                    
+                    setTimeout(() => {
+                        ripple.remove();
+                    }, 600);
+                });
+            });
+        }
 
-      tab.innerHTML = `
-        <div class="tab-header">${url}</div>
-        <iframe src="${url}"></iframe>
-      `;
+        // Add ripple animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes ripple {
+                to {
+                    transform: scale(2);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
 
-      tabContainer.appendChild(tab);
-    });
-  </script>
+        // Initialize
+        createStars();
+        addClickEffect();
+    </script>
 </body>
 </html>
